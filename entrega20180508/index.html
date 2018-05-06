@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TP4 Layout HTML - utilizacion de bootstrap</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <style>
+      /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+      .row.content {height: 150%}
+      
+      /* Set gray background color and 100% height */
+      .sidenav {
+        background-color: #f1f1f1;
+        height: 100%;
+      }
+      
+      /* Set black background color, white text and some padding for the footer*/
+      footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+      }
+      
+      /* On small screens, set height to 'auto' for sidenav and grid */
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+        }
+        .row.content {height: auto;} 
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container-fluid">
+      <div class="row content">
+        <!--La idea es que el col-sm-4 sidenav quede fijo, pero de momento no lo pudimos lograr-->
+        <div class="col-sm-4 sidenav">
+          <h4>Cotizaciones en Argentina</h4>
+
+          <!--De momento solo tenemos bonos, pero tiene sentido dejar esta lista en la que se podrían agregar acciones, entre otros-->
+          <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#section1">Bonos</a></li>
+            <!--<li><a href="#section2">Acciones</a></li>-->
+          </ul><br>
+
+          <!--El buscador puede servir para explorar la tabla con mayor facilidad-->
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar Especie..">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
+
+          <!--La idea es cargar el archivo que tenemos en una lista seleccionable, y que la seleccion se refleje en el gráfico. De momento se utiliza una tabla simple-->
+          <table id="myTable" class="table" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Especie</th>
+                    <th>Variacion del día</th>
+                    <th>Max</th>
+                    <th>Min</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                  <th>Especie</th>
+                  <th>Variacion del día</th>
+                  <th>Max</th>
+                  <th>Min</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr>
+                    <td>DICY</td>
+                    <td>0.00</td>
+                    <td>$3185.00</td>
+                    <td>$3000.00</td>
+                </tr>
+                <tr>
+                    <td>TVPE</td>
+                    <td>0.00</td>
+                    <td>$214.00</td>
+                    <td>$200.00</td>
+                </tr>
+                <tr>
+                    <td>BDC19</td>
+                    <td>0.00</td>
+                    <td>$1045.00</td>
+                    <td>$1000.00</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <!--En la siguiente seccion se ubicarían los graficoss de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
+        <div class="col-sm-8">
+
+          <h4>Variaciones semanales durante los últimos dos años</h4>
+          <hr>
+          <svg width="883" height="304">
+              <image href="resources/sample.png" clip-path="url(#circleView)" />
+          </svg>
+          
+          <br><br>
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="container-fluid">
+      <p>Visualización de la Información - Maestría en data mining y descubrimiento del conocimiento - 2018</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="resources/d3/d3.js"></script>
+    <script src="resources/js/jquery-3.3.1.min.js"></script>
+
+    <!-- Nuestro script -->
+    <script src="main.js"></script>
+  </body>
+</html>
