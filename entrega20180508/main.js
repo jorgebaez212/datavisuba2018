@@ -37,7 +37,37 @@ function addTickersTable(targetDivId, newTickersTableId){
                     .enter()
                     .append("th")
                     .text(function(d) { return d; });
+    
+    var allTickersTablebody = allTickersTable.append("tbody");
     return(allTickersTable);
+}
+
+function addRowToTickersTable(tickersTableBody, rowArray, rowBehaviourOnClick){
+    var newTickers = []
+    newTickers.push(rowArray)
+
+    var newTickerRow = tickersTableBody.selectAll("tr")
+                                        .data(newTickers)
+                                        .enter()
+                                        .append("tr")
+                                        .on("click", function(d) {rowBehaviourOnClick(d) } );
+    debugger;
+    var newCells =  newTickerRow.selectAll("td")
+                                .data(function(d) {
+                                    console.log(d);
+                                    return d;
+                                })
+                                .enter()
+                                .append("td")
+                                .text(function(d) {
+                                    return d;
+                                });
+    return(newTickerRow);
+}
+
+function addRowToSelectedList(selectedRow){
+    var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
+    addRowToTickersTable(selectedTickersTableBody, selectedRow, function(d) {  alert(d); });
 }
 
 function loadTickerTables(rawDataArray){
@@ -60,12 +90,13 @@ function loadTickerTables(rawDataArray){
     var allTickersTable = addTickersTable("#allTickersContainer","allTickersTable");
 
     //Cargo la tabla con todos los tickers disponibles en el archivo
-    var allTickersTablebody = allTickersTable.append("tbody");
+
+    var allTickersTablebody = allTickersTable.select("tbody");
     allTickersRows = allTickersTablebody.selectAll("tr")
                                         .data(allTickersData)
                                         .enter()
                                         .append("tr")
-                                        .on("click", function(d) { alert(d); }) ;
+                                        .on("click", function(d){ addRowToSelectedList(d); } ) ;
     // We built the rows using the nested array - now each row has its own array.
     cells = allTickersRows.selectAll("td")
         // each row has data associated; we get it and enter it for the cells.
