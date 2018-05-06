@@ -98,7 +98,7 @@ function loadCSVPrices() {
 
     console.log('Hey!');
 
-    d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/entrega20180508/resources/test.csv")
+    d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/test.csv")
         .then(function(data) {
                 loadTickerTables(data);
             });
