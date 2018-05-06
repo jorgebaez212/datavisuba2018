@@ -1,28 +1,8 @@
-// Funcion principal, que se encarga de tomar los elementos en el widget "input" y de 
-// insertarlo en la lista. Usamos jQuery para acceder y modificar los componentes de la página.  
 var main = function() {
 
     console.log('Hey!');
 
-    $('form')
 }
-
-function addRowHandlers() {
-    var table = document.getElementById("tableId");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-      var currentRow = table.rows[i];
-      var createClickHandler = function(row) {
-        return function() {
-          var cell = row.getElementsByTagName("td")[0];
-          var id = cell.innerHTML;
-          alert("id:" + id);
-        };
-      };
-      currentRow.onclick = createClickHandler(currentRow);
-    }
-}
-
 
 function addTickersTable(targetDivId, newTickersTableId){
     var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
@@ -75,7 +55,6 @@ function loadTickerTables(rawDataArray){
     //Selecciono la informacion de interes del archivo de data cruda
     var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
     var allTickersData = []
-    var selectedTickers = []
 
     var arrayLength = rawDataArray.length;
     for (var i = 0; i < arrayLength; i++) {
