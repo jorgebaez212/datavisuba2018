@@ -6,7 +6,7 @@ var main = function() {
 
 
 // Tres arreglos de datos principales: Campos / Datos Totales / Datos Filtrados
-var headers = ["especie";"price";"price_ayer";"price_max";"variacion_price"]
+var headers = ["especie","price","price_ayer","price_max","variacion_price"]
 var allTickersData = [];
 var filteredData = [];
 
