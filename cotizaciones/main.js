@@ -4,8 +4,9 @@ var main = function() {
 
 }
 
+
 // Tres arreglos de datos principales: Campos / Datos Totales / Datos Filtrados
-var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
+var headers = ["especie";"price";"price_ayer";"price_max";"variacion_price"]
 var allTickersData = [];
 var filteredData = [];
 
@@ -63,10 +64,10 @@ function loadTickerTables(rawDataArray){
     var arrayLength = rawDataArray.length;
     for (var i = 0; i < arrayLength; i++) {
         allTickersData.push([   rawDataArray[i].especie, 
-                                rawDataArray[i].d_proc, 
-                                parseFloat(rawDataArray[i].tea_tir).toFixed(3), 
-                                parseFloat(rawDataArray[i].price).toFixed(3), 
-                                parseFloat(rawDataArray[i].price_dv01).toFixed(3)]);
+                                parseFloat(rawDataArray[i].price).toFixed(3),
+                                parseFloat(rawDataArray[i].price_ayer).toFixed(3), 
+                                parseFloat(rawDataArray[i].price_max).toFixed(3), 
+                                parseFloat(rawDataArray[i].variacion_price).toFixed(3)]);
     }
 
     //Genero tabla principal de tickers
@@ -102,7 +103,7 @@ function loadCSVPrices() {
 
     console.log('Hey!');
 
-    d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/test.csv")
+    d3.dsv(";","https://github.com/jorgebaez212/datavisuba2018/blob/master/cotizaciones/resources/ticker_summary.csv")
         .then(function(data) {
                 loadTickerTables(data);
             });
