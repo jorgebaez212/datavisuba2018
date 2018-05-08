@@ -4,8 +4,12 @@ var main = function() {
 
 }
 
+// Tres arreglos de datos principales: Campos / Datos Totales / Datos Filtrados
+var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
+var allTickersData = [];
+var filteredData = [];
+
 function addTickersTable(targetDivId, newTickersTableId){
-    var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
 
     var allTickersTable = d3.select(targetDivId)
                             .append("table")
@@ -23,15 +27,14 @@ function addTickersTable(targetDivId, newTickersTableId){
 }
 
 function addRowToTickersTable(tickersTableBody, rowArray, rowBehaviourOnClick){
-    var newTickers = []
-    newTickers.push(rowArray)
 
+    // Usamos el arreglo "filteredData" para actualizar la visualización.
     var newTickerRow = tickersTableBody.selectAll("tr")
-                                        .data(newTickers)
+                                        .data(filteredData)
                                         .enter()
                                         .append("tr")
                                         .on("click", function(d) {rowBehaviourOnClick(d) } );
-    debugger;
+    //debugger;
     var newCells =  newTickerRow.selectAll("td")
                                 .data(function(d) {
                                     console.log(d);
@@ -46,6 +49,10 @@ function addRowToTickersTable(tickersTableBody, rowArray, rowBehaviourOnClick){
 }
 
 function addRowToSelectedList(selectedRow){
+    // Actualizamos el arreglo de datos, la visualización se acomoda sola!
+    filteredData.push(selectedRow);
+    
+    // Le damos a update() de la visualización de la tabla.
     var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
     addRowToTickersTable(selectedTickersTableBody, selectedRow, function(d) {  alert(d); });
 }
@@ -53,9 +60,6 @@ function addRowToSelectedList(selectedRow){
 function loadTickerTables(rawDataArray){
     
     //Selecciono la informacion de interes del archivo de data cruda
-    var headers = ["Especie", "d_proc", "tea_tir", "Precio", "price_dv01"]
-    var allTickersData = []
-
     var arrayLength = rawDataArray.length;
     for (var i = 0; i < arrayLength; i++) {
         allTickersData.push([   rawDataArray[i].especie, 
@@ -69,13 +73,13 @@ function loadTickerTables(rawDataArray){
     var allTickersTable = addTickersTable("#allTickersContainer","allTickersTable");
 
     //Cargo la tabla con todos los tickers disponibles en el archivo
-
     var allTickersTablebody = allTickersTable.select("tbody");
     allTickersRows = allTickersTablebody.selectAll("tr")
                                         .data(allTickersData)
                                         .enter()
                                         .append("tr")
                                         .on("click", function(d){ addRowToSelectedList(d); } ) ;
+    
     // We built the rows using the nested array - now each row has its own array.
     cells = allTickersRows.selectAll("td")
         // each row has data associated; we get it and enter it for the cells.
