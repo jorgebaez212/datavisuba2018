@@ -103,7 +103,7 @@ function loadCSVPrices() {
 
     console.log('Hey!');
 
-    d3.dsv(";","https://github.com/jorgebaez212/datavisuba2018/blob/master/cotizaciones/resources/ticker_summary.csv")
+    d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
         .then(function(data) {
                 loadTickerTables(data);
             });
