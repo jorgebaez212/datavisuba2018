@@ -29,28 +29,6 @@ function addTickersTable(targetDivId, newTickersTableId){
     return(allTickersTable);
 }
 
-function addRowToTickersTable(tickersTableBody, rowBehaviourOnClick){
-
-    // Usamos el arreglo "filteredData" para actualizar la visualización.
-    var newTickerRow = tickersTableBody.selectAll("tr")
-                                        .data(filteredData)
-                                        .enter()
-                                        .append("tr")
-                                        .on("click", function(d) {rowBehaviourOnClick(d) } );
-    //debugger;
-    var newCells =  newTickerRow.selectAll("td")
-                                .data(function(d) {
-                                    console.log(d);
-                                    return d;
-                                })
-                                .enter()
-                                .append("td")
-                                .text(function(d) {
-                                    return d;
-                                });
-    return(newTickerRow);
-}
-
 
 function refreshTickersTable(tickersTableBody, dataArray, rowBehaviourOnClick){
     // Vacio la tabla para refrescarla.
@@ -80,17 +58,20 @@ function refreshTickersTable(tickersTableBody, dataArray, rowBehaviourOnClick){
 
 
 function addRowToSelectedList(selectedRow){
-    // Actualizamos el arreglo de datos, la visualización se acomoda sola!
-    filteredData.push(selectedRow);
+	// Actualizamos el arreglo de datos, la visualización se acomoda sola!
+	filteredData.push(selectedRow);
     
-    // Le damos a update() de la visualización de la tabla.
-    var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
-    addRowToTickersTable(selectedTickersTableBody, function(d) {  deleteFromSelectedList(d); });
+	// Le damos a update() de la visualización de la tabla.
+	var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
+	refreshTickersTable(selectedTickersTableBody,filteredData,deleteFromSelectedList);st(d);
 }
 
 
 function deleteFromSelectedList(selectedRowFromSelectedList){
+	// Actualizamos el arreglo de datos, eliminando la row seleccionada
 	filteredData = filteredData.filter(tickerSummary => tickerSummary[0]!=selectedRowFromSelectedList[0]);
+
+	// Le damos a update() de la visualización de la tabla.
 	var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
 	refreshTickersTable(selectedTickersTableBody,filteredData,deleteFromSelectedList);
 }
@@ -112,6 +93,8 @@ function loadTickerTables(rawDataArray){
     var allTickersTable = addTickersTable("#allTickersContainer","allTickersTable");
 
     //Cargo la tabla con todos los tickers disponibles en el archivo
+    refreshTickersTable(allTickersTable,allTickersData,addRowToSelectedList);
+/*
     var allTickersTablebody = allTickersTable.select("tbody");
     allTickersRows = allTickersTablebody.selectAll("tr")
                                         .data(allTickersData)
@@ -131,7 +114,7 @@ function loadTickerTables(rawDataArray){
             .text(function(d) {
                 return d;
             });
-
+*/
     //Genero tabla de tickers seleccionados
     var selectedTickersContainer = addTickersTable("#selectedTickersContainer","selectedTickersTable");
 
