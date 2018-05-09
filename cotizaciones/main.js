@@ -10,6 +10,8 @@ var headers = ["especie","price","price_ayer","price_max","variacion_price"]
 var allTickersData = [];
 var filteredData = [];
 
+var allTickersPricesVariations = [];
+
 function addTickersTable(targetDivId, newTickersTableId){
 
     var allTickersTable = d3.select(targetDivId)
@@ -27,7 +29,7 @@ function addTickersTable(targetDivId, newTickersTableId){
     return(allTickersTable);
 }
 
-function addRowToTickersTable(tickersTableBody, rowArray, rowBehaviourOnClick){
+function addRowToTickersTable(tickersTableBody, rowBehaviourOnClick){
 
     // Usamos el arreglo "filteredData" para actualizar la visualización.
     var newTickerRow = tickersTableBody.selectAll("tr")
@@ -49,14 +51,50 @@ function addRowToTickersTable(tickersTableBody, rowArray, rowBehaviourOnClick){
     return(newTickerRow);
 }
 
+
+function refreshTickersTable(tickersTableBody, dataArray, rowBehaviourOnClick){
+    // Vacio la tabla para refrescarla.
+    var newTickerRow = tickersTableBody.selectAll("tr").remove();
+
+    // Usamos el arreglo "filteredData" para actualizar la visualización.
+    var newTickerRows = tickersTableBody.selectAll("tr")
+                                        .data(dataArray)
+                                        .enter()
+                                        .append("tr")
+                                        .on("click", function(d) {rowBehaviourOnClick(d) } );
+
+    var newCols  =  newTickerRows.selectAll("td")
+                                 .data(function(d) {
+                                     console.log(d);
+                                     return d;
+                                 })
+                                 .enter()
+                                 .append("td")
+                                 .text(function(d) {
+                                     return d;
+                                 });
+    return(newTickerRows);
+}
+
+
+
+
 function addRowToSelectedList(selectedRow){
     // Actualizamos el arreglo de datos, la visualización se acomoda sola!
     filteredData.push(selectedRow);
     
     // Le damos a update() de la visualización de la tabla.
     var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
-    addRowToTickersTable(selectedTickersTableBody, selectedRow, function(d) {  alert(d); });
+    addRowToTickersTable(selectedTickersTableBody, function(d) {  deleteFromSelectedList(d); });
 }
+
+
+function deleteFromSelectedList(selectedRowFromSelectedList){
+	filteredData = filteredData.filter(tickerSummary => tickerSummary[0]!=selectedRowFromSelectedList[0]);
+	var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
+	refreshTickersTable(selectedTickersTableBody,filteredData,deleteFromSelectedList);
+}
+
 
 function loadTickerTables(rawDataArray){
     
@@ -99,14 +137,36 @@ function loadTickerTables(rawDataArray){
 
 }
 
+
+function loadTickersPricesVariations(rawDataArray){
+    
+    //Selecciono la informacion de interes del archivo de data cruda
+    var arrayLength = rawDataArray.length;
+    for (var i = 0; i < arrayLength; i++) {
+        allTickersPricesVariations.push([	rawDataArray[i].especie, 
+					        parseInt(rawDataArray[i].d_proc).toFixed(3),
+					        parseFloat(rawDataArray[i].price).toFixed(3), 
+					        parseFloat(rawDataArray[i].tea_tir).toFixed(3),
+					        parseFloat(rawDataArray[i].price_ayer).toFixed(3), 
+					        parseFloat(rawDataArray[i].variacion_price).toFixed(3) ]);
+    }
+
+}
+
+
 function loadCSVPrices() {
 
     console.log('Hey!');
-
-    d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
-        .then(function(data) {
-                loadTickerTables(data);
-            });
+	//Cargo datos para tabla resumen
+	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
+		.then(function(data) {
+			loadTickerTables(data);
+		    });
+	//Cargo datos para visulizacion
+	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
+		.then(function(data) {
+		        loadTickersPricesVariations(data);
+		    });
 
 }
 
