@@ -4,6 +4,9 @@ var headersInfo = [ {propertyName:"especie",tableName:"Especie"},
                     {propertyName:"price_ayer",tableName:"Precio Anterior"},
                     {propertyName:"price_max",tableName:"Precio Máximo"},
                     {propertyName:"variacion_price",tableName:"Variación"} ]
+
+var allPricesColumnMapping = { }
+
 var allTickersLatestStatus = [];
 var selectedTickersLatestStatus = [];
 
@@ -30,36 +33,56 @@ function refreshTickersPlots(){
     var priceVariationTarces = [];
     var tirVariationTarces = [];
     
-    //Selecciono la informacion de interes del archivo de data cruda
+    //Por cada item en la lista selectedTickersLatestStatus, busco las entradas existentes en allTickersPricesVariations.
     for (var i=0, len= selectedTickersLatestStatus.length ; i<len; i++) {
+
         var allVariationsOfTicker = allTickersPricesVariations.filter(tickerVariation => tickerVariation[0]==selectedTickersLatestStatus[i][0]);
 
-        var newTrace = {};
-        for (var j=0, headLen=headersInfo.length ; j<headLen; j++) {
-            var columnToLoad = headersInfo[j].propertyName;
-            if(columnToLoad.includes("price")){
-                newRow.push( parseFloat(rawDataArray[i][columnToLoad]).toFixed(3) );
-            }
-            else{
-                newRow.push(rawDataArray[i][columnToLoad]);
-            }
+        // Genero una linea de variacion de precio y una de variacion de tir.
+        var newPriceTrace = {
+            x: [],
+            y: [],
+            text: [],
+            mode: 'lines',
+            name: selectedTickersLatestStatus[i][0],
+            line: {shape: 'linear'},
+            type: 'scatter'
+        };
+
+        var newTirTrace = {
+            x: [],
+            y: [],
+            mode: 'lines',
+            name: selectedTickersLatestStatus[i][0],
+            line: {shape: 'linear'},
+            type: 'scatter'
+        };
+
+        for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
+            newPriceTrace.x.push(allVariationsOfTicker[j][allPricesColumnMapping.d_proc]);
+            newPriceTrace.y.push(allVariationsOfTicker[j][allPricesColumnMapping.price]);
+            
+            var priceVariation = parseFloat(allVariationsOfTicker[j][allPricesColumnMapping.variacion_price]).toFixed(3).toString();
+            newPriceTrace.text.push("Variacion respecto al dia previo: " + priceVariation);
+
+            newTirTrace.x.push(allVariationsOfTicker[j][allPricesColumnMapping.d_proc]);
+            newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesColumnMapping.tea_tir]).toFixed(4));
         }
-        allTickersLatestStatus.push(newRow);
+
+        priceVariationTarces.push(newPriceTrace);
+        tirVariationTarces.push(newTirTrace);
 
     }
-    
-    var trace1 = {
-        x: [1, 2, 3, 4], 
-        y: [10, 15, 13, 17], 
-        type: 'scatter'
-      };
-      var trace2 = {
-        x: [1, 2, 3, 4], 
-        y: [16, 5, 11, 9], 
-        type: 'scatter'
-      };
-      var data = [trace1, trace2];
-      Plotly.newPlot('myDiv', data);
+
+    var layout = {
+        legend: {
+          y: 0.5,
+          font: {size: 16}
+        }};
+
+      Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layout);
+      Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layout);
+
 }
 
 function refreshTickersTable(tickersTableBody, dataArray, rowBehaviourOnClick){
@@ -95,9 +118,12 @@ function addRowToSelectedList(selectedRow){
     if(testItemExists.length==0){
         selectedTickersLatestStatus.push(selectedRow);
 
-        // Le damos update() a la visualización de la tabla.
+        // Refresco tabla de tickers seleccionados.
         var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
         refreshTickersTable(selectedTickersTableBody,selectedTickersLatestStatus,deleteFromSelectedList);
+
+        // Refresco plots de variaciones.
+        refreshTickersPlots();
     }
 }
 
@@ -106,9 +132,12 @@ function deleteFromSelectedList(selectedRowFromSelectedList){
 	// Actualizamos el arreglo de datos, eliminando la row seleccionada
 	selectedTickersLatestStatus = selectedTickersLatestStatus.filter(tickerSummary => tickerSummary[0]!=selectedRowFromSelectedList[0]);
 
-	// Le damos update() a la visualización de la tabla.
+	// Refresco tabla de tickers seleccionados.
 	var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
-	refreshTickersTable(selectedTickersTableBody,selectedTickersLatestStatus,deleteFromSelectedList);
+    refreshTickersTable(selectedTickersTableBody,selectedTickersLatestStatus,deleteFromSelectedList);
+    
+    // Refresco plots de variaciones.
+    refreshTickersPlots();
 }
 
 
@@ -149,29 +178,39 @@ function loadTickersPricesVariations(rawDataArray){
     var arrayLength = rawDataArray.length;
     for (var i = 0; i < arrayLength; i++) {
         allTickersPricesVariations.push([	rawDataArray[i].especie, 
-					        parseInt(rawDataArray[i].d_proc).toFixed(3),
-					        parseFloat(rawDataArray[i].price).toFixed(3), 
-					        parseFloat(rawDataArray[i].tea_tir).toFixed(3),
-					        parseFloat(rawDataArray[i].price_ayer).toFixed(3), 
-					        parseFloat(rawDataArray[i].variacion_price).toFixed(3) ]);
+                                            rawDataArray[i].d_proc,
+                                            parseFloat(rawDataArray[i].price).toFixed(3), 
+                                            parseFloat(rawDataArray[i].tea_tir).toFixed(3),
+                                            parseFloat(rawDataArray[i].price_ayer).toFixed(3), 
+                                            parseFloat(rawDataArray[i].variacion_price).toFixed(3) ]);
     }
 
+   allPricesColumnMapping = {
+                                "especie" : 0,
+                                "d_proc" : 1,
+                                "price" : 2,
+                                "tea_tir" : 3,
+                                "price_ayer" : 4,
+                                "variacion_price" : 5
+                            }
 }
 
 
 function loadCSVPrices() {
 
-	//Cargo datos para tabla resumen
+    //Cargo datos para visulizacion
+	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
+    .then(function(data) {
+            loadTickersPricesVariations(data);
+        });
+
+    //Cargo datos para tabla resumen
 	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
 		.then(function(data) {
 			loadTickerTables(data);
             });
             
-	//Cargo datos para visulizacion
-	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
-		.then(function(data) {
-		        loadTickersPricesVariations(data);
-		    });
+	
 
 }
 
