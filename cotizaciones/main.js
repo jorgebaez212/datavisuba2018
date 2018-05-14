@@ -5,7 +5,8 @@ var headersInfo = [ {propertyName:"especie",tableName:"Especie"},
                     {propertyName:"price_max",tableName:"Precio Máximo"},
                     {propertyName:"variacion_price",tableName:"Variación"} ]
 
-var allPricesColumnMapping = { }
+var allPricesVariationsColumnMapping = { }
+var tickersSummaryColumnMapping = { }
 
 var allTickersLatestStatus = [];
 var selectedTickersLatestStatus = [];
@@ -36,7 +37,9 @@ function refreshTickersPlots(){
     //Por cada item en la lista selectedTickersLatestStatus, busco las entradas existentes en allTickersPricesVariations.
     for (var i=0, len= selectedTickersLatestStatus.length ; i<len; i++) {
 
-        var allVariationsOfTicker = allTickersPricesVariations.filter(tickerVariation => tickerVariation[0]==selectedTickersLatestStatus[i][0]);
+        var index = tickersSummaryColumnMapping.especie;
+
+        var allVariationsOfTicker = allTickersPricesVariations.filter(tickerVariation => tickerVariation[index]==selectedTickersLatestStatus[i][index]);
 
         // Genero una linea de variacion de precio y una de variacion de tir.
         var newPriceTrace = {
@@ -44,7 +47,7 @@ function refreshTickersPlots(){
             y: [],
             text: [],
             mode: 'lines',
-            name: selectedTickersLatestStatus[i][0],
+            name: selectedTickersLatestStatus[i][index],
             line: {shape: 'linear'},
             type: 'scatter'
         };
@@ -53,20 +56,20 @@ function refreshTickersPlots(){
             x: [],
             y: [],
             mode: 'lines',
-            name: selectedTickersLatestStatus[i][0],
+            name: selectedTickersLatestStatus[i][index],
             line: {shape: 'linear'},
             type: 'scatter'
         };
 
         for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
-            newPriceTrace.x.push(allVariationsOfTicker[j][allPricesColumnMapping.d_proc]);
-            newPriceTrace.y.push(allVariationsOfTicker[j][allPricesColumnMapping.price]);
+            newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
+            newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
             
-            var priceVariation = parseFloat(allVariationsOfTicker[j][allPricesColumnMapping.variacion_price]).toFixed(3).toString();
+            var priceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(3).toString();
             newPriceTrace.text.push("Variacion respecto al dia previo: " + priceVariation);
 
-            newTirTrace.x.push(allVariationsOfTicker[j][allPricesColumnMapping.d_proc]);
-            newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesColumnMapping.tea_tir]).toFixed(4));
+            newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
+            newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
         }
 
         priceVariationTarces.push(newPriceTrace);
@@ -113,8 +116,10 @@ function refreshTickersTable(tickersTableBody, dataArray, rowBehaviourOnClick){
 
 
 function addRowToSelectedList(selectedRow){
-    // Actualizamos el arreglo de datos, la visualización se acomoda sola!
-    testItemExists = selectedTickersLatestStatus.filter(tickerSummary => tickerSummary[0]==selectedRow[0]);
+    
+    // Actualizamos el arreglo de datos.
+    var index = tickersSummaryColumnMapping.especie;
+    testItemExists = selectedTickersLatestStatus.filter(tickerSummary => tickerSummary[index]==selectedRow[index]);
 
     if(testItemExists.length==0){
         selectedTickersLatestStatus.push(selectedRow);
@@ -130,8 +135,9 @@ function addRowToSelectedList(selectedRow){
 
 
 function deleteFromSelectedList(selectedRowFromSelectedList){
-	// Actualizamos el arreglo de datos, eliminando la row seleccionada
-	selectedTickersLatestStatus = selectedTickersLatestStatus.filter(tickerSummary => tickerSummary[0]!=selectedRowFromSelectedList[0]);
+    // Actualizamos el arreglo de datos.
+    var index = tickersSummaryColumnMapping.especie;
+	selectedTickersLatestStatus = selectedTickersLatestStatus.filter(tickerSummary => tickerSummary[index]!=selectedRowFromSelectedList[index]);
 
 	// Refresco tabla de tickers seleccionados.
 	var selectedTickersTableBody = d3.select("#selectedTickersTable").select("tbody");
@@ -156,6 +162,8 @@ function loadTickerTables(rawDataArray){
             else{
                 newRow.push(rawDataArray[i][columnToLoad]);
             }
+            //Cargo column mapping para referenciar columnas por nombre
+            tickersSummaryColumnMapping[columnToLoad]=i;
         }
         allTickersLatestStatus.push(newRow);
 
@@ -169,6 +177,16 @@ function loadTickerTables(rawDataArray){
 
     //Genero tabla de tickers seleccionados
     var selectedTickersContainer = createTickersTable("#selectedTickersContainer","selectedTickersTable");
+
+    //Cargo column mapping para referenciar columnas por nombre
+    tickersSummaryColumnMapping =   {
+                                        "especie" : 0,
+                                        "d_proc" : 1,
+                                        "price" : 2,
+                                        "tea_tir" : 3,
+                                        "price_ayer" : 4,
+                                        "variacion_price" : 5
+                                    }
 
 }
 
@@ -186,14 +204,15 @@ function loadTickersPricesVariations(rawDataArray){
                                             parseFloat(rawDataArray[i].variacion_price).toFixed(3) ]);
     }
 
-   allPricesColumnMapping = {
-                                "especie" : 0,
-                                "d_proc" : 1,
-                                "price" : 2,
-                                "tea_tir" : 3,
-                                "price_ayer" : 4,
-                                "variacion_price" : 5
-                            }
+    //Cargo column mapping para referenciar columnas por nombre
+    allPricesVariationsColumnMapping =  {
+                                            "especie" : 0,
+                                            "d_proc" : 1,
+                                            "price" : 2,
+                                            "tea_tir" : 3,
+                                            "price_ayer" : 4,
+                                            "variacion_price" : 5
+                                        }
 }
 
 
@@ -216,27 +235,30 @@ function loadCSVPrices() {
 var main = function() {
 
     console.log('Hey!');
+
     loadCSVPrices();
 
+    //Agrego comportamiento al buscador de tickers.
+    $("#tickerSearchBox").keyup( function() {
+        var allTickersTableBody = d3.select("#allTickersTable").select("tbody");
+        var searchText = $("#tickerSearchBox").val();
+
+        var index = tickersSummaryColumnMapping.especie;
+
+        if(searchText.length!=0){
+            var filteredTickersLatestStatus = allTickersLatestStatus.filter(tickerSummary => tickerSummary[index].includes(searchText));
+
+            // Refresco tabla resumen de tickers utilizando el texto para filtrar especies.
+            refreshTickersTable(allTickersTableBody, filteredTickersLatestStatus, addRowToSelectedList);
+        }
+        else{
+            // Refresco tabla resumen de tickers mostrando todos los tickers disponibles.
+            refreshTickersTable(allTickersTableBody, allTickersLatestStatus, addRowToSelectedList);
+        }
+
+    });
+
 }
-
-//Agrego comportamiento al buscador de tickers.
-$("#tickerSearchBox").keyup( function() {
-    var allTickersTableBody = d3.select("#allTickersTable").select("tbody");
-    var searchText = $("#tickerSearchBox").val();
-
-    if(searchText.length!=0){
-        var filteredTickersLatestStatus = allTickersLatestStatus.filter(tickerSummary => tickerSummary[0].includes(searchText));
-
-        // Refresco tabla resumen de tickers utilizando el texto para filtrar especies.
-        refreshTickersTable(allTickersTableBody, filteredTickersLatestStatus, addRowToSelectedList);
-    }
-    else{
-        // Refresco tabla resumen de tickers mostrando todos los tickers disponibles.
-        refreshTickersTable(allTickersTableBody, allTickersLatestStatus, addRowToSelectedList);
-    }
-
-});
 
 // Queremos que la función main se ejecute cuando la página (document) esté lista
 $(document).ready(main);
