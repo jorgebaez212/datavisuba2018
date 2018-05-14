@@ -52,6 +52,9 @@
         overflow:auto; 
         height:270px;
       }
+      .tickerSelection{
+        background-color: #c8d1d3;
+      }
     </style>
   </head>
   <body>
@@ -82,12 +85,15 @@
           <div id="allTickersContainer" class="container">
           </div>
           
-          <div id="selectedTickersContainer" class="container">
+          <div class="tickerSelection">
+              <div id="selectedTickersContainer" class="container">
+              </div>
           </div>
+          
           
         </div>
 
-        <!--En la siguiente seccion se ubicarían los graficoss de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
+        <!--En la siguiente seccion se ubicarían los graficos de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
         <div class="col-sm-8">
 
           <h4>Variaciones semanales durante los últimos dos años</h4>
@@ -108,8 +114,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="resources/d3/d3.js"></script>
-    <script src="resources/js/jquery-3.3.1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Nuestro script -->
     <script src="main.js"></script>
