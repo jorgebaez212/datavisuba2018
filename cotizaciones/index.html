@@ -73,7 +73,7 @@
 
           <!--El buscador puede servir para explorar la tabla con mayor facilidad-->
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar Especie..">
+            <input id="tickerSearchBox" type="text" class="form-control" placeholder="Buscar Especie..">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button">
                 <span class="glyphicon glyphicon-search"></span>
@@ -81,7 +81,7 @@
             </span>
           </div>
 
-          <!--La idea es cargar el archivo que tenemos en una lista seleccionable, y que la seleccion se refleje en el gráfico. De momento se utiliza una tabla simple-->
+          <!--Tablas resumen de los tickers disponibles. Al hacer click en un item de allTickersContainer, este pasa a selectedTickersContainer y se grafica-->
           <div id="allTickersContainer" class="container">
           </div>
           
@@ -101,14 +101,6 @@
 
             <div id="tirVariationsPlot">
             </div>
-
-          <!--<h4>Variaciones semanales durante los últimos dos años</h4>
-          <hr>
-          <svg width="883" height="304">
-              <image href="resources/sample.png" clip-path="url(#circleView)" />
-          </svg>
-          
-          <br><br>-->
 
         </div>
       </div>

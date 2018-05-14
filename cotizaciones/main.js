@@ -75,6 +75,7 @@ function refreshTickersPlots(){
     }
 
     var layout = {
+        showlegend: true,
         legend: {
           y: 0.5,
           font: {size: 16}
@@ -209,8 +210,6 @@ function loadCSVPrices() {
 		.then(function(data) {
 			loadTickerTables(data);
             });
-            
-	
 
 }
 
@@ -220,6 +219,24 @@ var main = function() {
     loadCSVPrices();
 
 }
+
+//Agrego comportamiento al buscador de tickers.
+$("#tickerSearchBox").keyup( function() {
+    var allTickersTableBody = d3.select("#allTickersTable").select("tbody");
+    var searchText = $("#tickerSearchBox").val();
+
+    if(searchText.length!=0){
+        var filteredTickersLatestStatus = allTickersLatestStatus.filter(tickerSummary => tickerSummary[0].includes(searchText));
+
+        // Refresco tabla resumen de tickers utilizando el texto para filtrar especies.
+        refreshTickersTable(allTickersTableBody, filteredTickersLatestStatus, addRowToSelectedList);
+    }
+    else{
+        // Refresco tabla resumen de tickers mostrando todos los tickers disponibles.
+        refreshTickersTable(allTickersTableBody, allTickersLatestStatus, addRowToSelectedList);
+    }
+
+});
 
 // Queremos que la función main se ejecute cuando la página (document) esté lista
 $(document).ready(main);
