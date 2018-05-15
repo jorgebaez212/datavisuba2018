@@ -4,59 +4,11 @@
     <title>TP4 Layout HTML - utilizacion de bootstrap</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Estilo -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
-    <style>
-      /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
-      .row.content {height: 100%}
-      
-      /* Set gray background color and 100% height */
-      .sidenav {
-        background-color: #f1f1f1;
-        height: 100%;
-      }
-      
-      /* Set black background color, white text and some padding for the footer*/
-      footer {
-        background-color: #555;
-        color: white;
-        padding: 15px;
-      }
-      
-      /* On small screens, set height to 'auto' for sidenav and grid */
-      @media screen and (max-width: 767px) {
-        .sidenav {
-          height: auto;
-          padding: 15px;
-        }
-        .row.content {height: auto;} 
-      }
-
-      /*table, th, td {
-        border: 1px solid black;
-      }*/
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th, td {
-        padding: 15px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      tr:hover {background-color: #42d9f3;}
-
-      .container {
-        margin-bottom: 10px;
-        width: 100%;
-        overflow:auto; 
-        height:270px;
-      }
-      .tickerSelection{
-        background-color: #c8d1d3;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
   </head>
+
   <body>
 
     <div class="container-fluid">
@@ -89,8 +41,7 @@
               <div id="selectedTickersContainer" class="container">
               </div>
           </div>
-          
-          
+
         </div>
 
         <!--En la siguiente seccion se ubicarían los graficos de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
