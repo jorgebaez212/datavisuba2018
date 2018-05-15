@@ -78,17 +78,23 @@ function refreshTickersPlots(){
 
 	    }
 
-	    var layout = {
+	    var layoutPrecio = {
 	        showlegend: true,
+	        title:"Variación de Precio",
 	        legend: {
 	          y: 0.5,
 	          font: {size: 16}
 	        }};
+	    Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layoutPrecio);
 
-	    layout.title="Variacion de Precio";
-	    Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layout);
-	    layout.title="Variacion de TIR";
-	    Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layout);
+		var layoutTIR = {
+	        showlegend: true,
+	        title:"Variación de TIR",
+	        legend: {
+	          y: 0.5,
+	          font: {size: 16}
+	        }};
+	    Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layoutTIR);
     }
     else{
     	d3.select("#priceVariationsPlot").selectAll("*").remove();
