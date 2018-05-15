@@ -85,7 +85,9 @@ function refreshTickersPlots(){
 	          font: {size: 16}
 	        }};
 
+	    layout.title="Variacion de Precio";
 	    Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layout);
+	    layout.title="Variacion de TIR";
 	    Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layout);
     }
     else{
