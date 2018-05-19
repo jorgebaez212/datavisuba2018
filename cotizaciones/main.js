@@ -61,7 +61,7 @@ function refreshTickersPlots(){
                 line: {shape: 'linear'},
                 type: 'scatter'
             };
-            //debugger;
+
             for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
                 newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
                 newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
@@ -71,16 +71,15 @@ function refreshTickersPlots(){
                 var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
                 yearlyPriceVariation = yearlyPriceVariation.toString();
 
-                newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
-                                        "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
+                newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "<br>" + 
+                                        "Variacion - año previo: %" + yearlyPriceVariation*100 );
 
                 newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
                 newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
             }
-            //debugger;
+
             priceVariationTarces.push(newPriceTrace);
             tirVariationTarces.push(newTirTrace);
-
         }
 
         var layoutPrecio = {
@@ -215,6 +214,7 @@ function loadTickersPricesVariations(rawDataArray){
     
     //Selecciono la informacion de interes del archivo de data cruda
     var arrayLength = rawDataArray.length;
+
     for (var i = 0; i < arrayLength; i++) {
         allTickersPricesVariations.push([	rawDataArray[i].especie, 
                                             rawDataArray[i].d_proc,
@@ -238,7 +238,7 @@ function loadTickersPricesVariations(rawDataArray){
                                             "variacion_price" : 6,
                                             "price_anio_ant" : 7
                                         }
-    //debugger;
+
 }
 
 
@@ -248,6 +248,14 @@ function loadCSVPrices() {
 	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
     .then(function(data) {
             loadTickersPricesVariations(data);
+            document
+                .getElementById("mainPage")
+                .style
+                .display = null;
+            document
+                .getElementById("loaderWheel")
+                .style
+                .display = "none";
         });
 
     //Cargo datos para tabla resumen
