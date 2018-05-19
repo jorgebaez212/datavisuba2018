@@ -67,12 +67,12 @@ function refreshTickersPlots(){
                 newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
                 
                 var dailyPriceVariationRaw = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4);
-                var dailyPriceVariation = dailyPriceVariationRaw*100;
+                var dailyPriceVariation = (dailyPriceVariationRaw*100).toFixed(2);
                 dailyPriceVariationRaw = dailyPriceVariationRaw.toString();
                 dailyPriceVariation = dailyPriceVariation.toString();
 
                 var yearlyPriceVariationRaw = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4);
-                var yearlyPriceVariation = yearlyPriceVariationRaw*100;
+                var yearlyPriceVariation = (yearlyPriceVariationRaw*100).toFixed(2);
                 yearlyPriceVariationRaw = yearlyPriceVariationRaw.toString();
                 yearlyPriceVariation = yearlyPriceVariation.toString();
 
