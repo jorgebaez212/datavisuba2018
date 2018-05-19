@@ -60,18 +60,23 @@ function refreshTickersPlots(){
             line: {shape: 'linear'},
             type: 'scatter'
         };
-
+        //debugger;
         for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
             newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
             newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
             
-            var priceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(3).toString();
-            newPriceTrace.text.push("Variacion respecto al dia previo: " + priceVariation);
+            var dailyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4)*100;
+            dailyPriceVariation = dailyPriceVariation.toString();
+            var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
+            yearlyPriceVariation = yearlyPriceVariation.toString();
+
+            //newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
+            //                        "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
 
             newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
             newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
         }
-
+        //debugger;
         priceVariationTarces.push(newPriceTrace);
         tirVariationTarces.push(newTirTrace);
 
@@ -201,7 +206,10 @@ function loadTickersPricesVariations(rawDataArray){
                                             parseFloat(rawDataArray[i].price).toFixed(3), 
                                             parseFloat(rawDataArray[i].tea_tir).toFixed(3),
                                             parseFloat(rawDataArray[i].price_ayer).toFixed(3), 
-                                            parseFloat(rawDataArray[i].variacion_price).toFixed(3) ]);
+                                            parseFloat(rawDataArray[i].variacion_price_anio_ant).toFixed(4),
+                                            parseFloat(rawDataArray[i].variacion_price).toFixed(4),
+                                            parseFloat(rawDataArray[i].price_anio_ant).toFixed(3)
+                                        ]);
     }
 
     //Cargo column mapping para referenciar columnas por nombre
@@ -211,8 +219,11 @@ function loadTickersPricesVariations(rawDataArray){
                                             "price" : 2,
                                             "tea_tir" : 3,
                                             "price_ayer" : 4,
-                                            "variacion_price" : 5
+                                            "variacion_price_anio_ant" : 5,
+                                            "variacion_price" : 6,
+                                            "price_anio_ant" : 7
                                         }
+    //debugger;
 }
 
 
