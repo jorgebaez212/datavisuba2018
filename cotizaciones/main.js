@@ -66,13 +66,21 @@ function refreshTickersPlots(){
                 newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
                 newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
                 
-                var dailyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4)*100;
+                var dailyPriceVariationRaw = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4);
+                var dailyPriceVariation = dailyPriceVariationRaw*100;
+                dailyPriceVariationRaw = dailyPriceVariationRaw.toString();
                 dailyPriceVariation = dailyPriceVariation.toString();
-                var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
+
+                var yearlyPriceVariationRaw = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4);
+                var yearlyPriceVariation = yearlyPriceVariationRaw*100;
+                yearlyPriceVariationRaw = yearlyPriceVariationRaw.toString();
                 yearlyPriceVariation = yearlyPriceVariation.toString();
 
-                newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "<br>" + 
-                                        "Variacion - año previo: %" + yearlyPriceVariation*100 );
+                newPriceTrace.text.push("Variacion: dia previo (raw data): " + dailyPriceVariationRaw + "<br>" + 
+                                        "Variacion: dia previo: %" + dailyPriceVariation + "<br>" /* + 
+                                        "Variacion: año previo (raw data): " + yearlyPriceVariationRaw + "<br>" + 
+                                        "Variacion: año previo: %" + yearlyPriceVariation  */
+                                    );
 
                 newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
                 newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
@@ -175,7 +183,10 @@ function loadTickerTables(rawDataArray){
         var newRow = [];
         for (var j=0, headLen=headersInfo.length ; j<headLen; j++) {
             var columnToLoad = headersInfo[j].propertyName;
-            if(columnToLoad.includes("price")){
+            if(columnToLoad.includes("variacion")){
+                newRow.push( "%"+(((parseFloat(rawDataArray[i][columnToLoad])*100).toFixed(2)).toString()) );
+            }
+            else if(columnToLoad.includes("price")){
                 newRow.push( parseFloat(rawDataArray[i][columnToLoad]).toFixed(3) );
             }
             else{
@@ -248,14 +259,17 @@ function loadCSVPrices() {
 	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
     .then(function(data) {
             loadTickersPricesVariations(data);
-            document
+
+            console.log('Pagina lista!');
+
+/*            document
                 .getElementById("mainPage")
                 .style
-                .display = null;
+                .display = "bock";
             document
                 .getElementById("loaderWheel")
                 .style
-                .display = "none";
+                .display = "none";*/
         });
 
     //Cargo datos para tabla resumen
@@ -267,8 +281,6 @@ function loadCSVPrices() {
 }
 
 var main = function() {
-
-    console.log('Hey!');
 
     loadCSVPrices();
 

@@ -1,4 +1,4 @@
-/* Set loader style and effects */
+/* Set loader style and effects 
 #mainPage {
   display : none;
 }
@@ -71,7 +71,7 @@ tr:hover {background-color: #42d9f3;}
   margin-bottom: 10px;
   width: 100%;
   overflow:auto; 
-  height:350px;
+  height:250px;
 }
 .tickerSelection{
   background-color: #c8d1d3;
