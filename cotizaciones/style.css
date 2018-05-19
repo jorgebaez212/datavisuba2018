@@ -1,0 +1,45 @@
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+.row.content {height: 100%}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  background-color: #f1f1f1;
+  height: 100%;
+}
+
+/* Set black background color, white text and some padding for the footer*/
+footer {
+  background-color: #555;
+  color: white;
+  padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height: auto;} 
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+tr:hover {background-color: #42d9f3;}
+
+.container {
+  margin-bottom: 10px;
+  width: 100%;
+  overflow:auto; 
+  height:350px;
+}
+.tickerSelection{
+  background-color: #c8d1d3;
+}

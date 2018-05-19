@@ -34,63 +34,78 @@ function refreshTickersPlots(){
     var priceVariationTarces = [];
     var tirVariationTarces = [];
     
-    //Por cada item en la lista selectedTickersLatestStatus, busco las entradas existentes en allTickersPricesVariations.
-    for (var i=0, len= selectedTickersLatestStatus.length ; i<len; i++) {
+    if(selectedTickersLatestStatus.length>0){
+        //Por cada item en la lista selectedTickersLatestStatus, busco las entradas existentes en allTickersPricesVariations.
+        for (var i=0, len= selectedTickersLatestStatus.length ; i<len; i++) {
 
-        var index = tickersSummaryColumnMapping.especie;
+            var index = tickersSummaryColumnMapping.especie;
 
-        var allVariationsOfTicker = allTickersPricesVariations.filter(tickerVariation => tickerVariation[index]==selectedTickersLatestStatus[i][index]);
+            var allVariationsOfTicker = allTickersPricesVariations.filter(tickerVariation => tickerVariation[index]==selectedTickersLatestStatus[i][index]);
 
-        // Genero una linea de variacion de precio y una de variacion de tir.
-        var newPriceTrace = {
-            x: [],
-            y: [],
-            text: [],
-            mode: 'lines',
-            name: selectedTickersLatestStatus[i][index],
-            line: {shape: 'linear'},
-            type: 'scatter'
-        };
+            // Genero una linea de variacion de precio y una de variacion de tir.
+            var newPriceTrace = {
+                x: [],
+                y: [],
+                text: [],
+                mode: 'lines',
+                name: selectedTickersLatestStatus[i][index],
+                line: {shape: 'linear'},
+                type: 'scatter'
+            };
 
-        var newTirTrace = {
-            x: [],
-            y: [],
-            mode: 'lines',
-            name: selectedTickersLatestStatus[i][index],
-            line: {shape: 'linear'},
-            type: 'scatter'
-        };
-        //debugger;
-        for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
-            newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
-            newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
-            
-            var dailyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4)*100;
-            dailyPriceVariation = dailyPriceVariation.toString();
-            var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
-            yearlyPriceVariation = yearlyPriceVariation.toString();
+            var newTirTrace = {
+                x: [],
+                y: [],
+                mode: 'lines',
+                name: selectedTickersLatestStatus[i][index],
+                line: {shape: 'linear'},
+                type: 'scatter'
+            };
+            //debugger;
+            for (var j=0, headLen=allVariationsOfTicker.length ; j<headLen; j++) {
+                newPriceTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
+                newPriceTrace.y.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.price]);
+                
+                var dailyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price]).toFixed(4)*100;
+                dailyPriceVariation = dailyPriceVariation.toString();
+                var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
+                yearlyPriceVariation = yearlyPriceVariation.toString();
 
-            newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
-                                    "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
+                newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
+                                        "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
 
-            newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
-            newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
+                newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
+                newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
+            }
+            //debugger;
+            priceVariationTarces.push(newPriceTrace);
+            tirVariationTarces.push(newTirTrace);
+
         }
-        //debugger;
-        priceVariationTarces.push(newPriceTrace);
-        tirVariationTarces.push(newTirTrace);
 
+        var layoutPrecio = {
+            showlegend: true,
+            title:"Variación de Precio",
+            legend: {
+                y: 0.5,
+                font: {size: 16}
+            }};
+        Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layoutPrecio);
+
+        var layoutTIR = {
+            showlegend: true,
+            title:"Variación de TIR",
+            legend: {
+                y: 0.5,
+                font: {size: 16}
+            }};
+        Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layoutTIR);
     }
-
-    var layout = {
-        showlegend: true,
-        legend: {
-          y: 0.5,
-          font: {size: 16}
-        }};
-
-      Plotly.newPlot('priceVariationsPlot', priceVariationTarces, layout);
-      Plotly.newPlot('tirVariationsPlot', tirVariationTarces, layout);
+    else{
+    	d3.select("#priceVariationsPlot").selectAll("*").remove();
+    	d3.select("#tirVariationsPlot").selectAll("*").remove();
+    }
+    
 
 }
 
