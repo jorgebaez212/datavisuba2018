@@ -3,7 +3,7 @@ var headersInfo = [ {propertyName:"especie",tableName:"Especie"},
                     {propertyName:"price",tableName:"Precio"},
                     {propertyName:"price_ayer",tableName:"Precio Anterior"},
                     {propertyName:"price_max",tableName:"Precio Máximo"},
-                    {propertyName:"variacion_price",tableName:"Variación"} ]
+                    {propertyName:"variacion_price",tableName:"Última Variación"} ]
 
 var allPricesVariationsColumnMapping = { }
 var tickersSummaryColumnMapping = { }
