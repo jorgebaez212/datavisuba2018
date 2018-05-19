@@ -254,29 +254,20 @@ function loadTickersPricesVariations(rawDataArray){
 
 
 function loadCSVPrices() {
-
+    console.log('Cargando datos ...');
     //Cargo datos para visulizacion
 	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/all_ticker_prices.csv")
     .then(function(data) {
             loadTickersPricesVariations(data);
 
-            console.log('Pagina lista!');
-
-/*            document
-                .getElementById("mainPage")
-                .style
-                .display = "bock";
-            document
-                .getElementById("loaderWheel")
-                .style
-                .display = "none";*/
-        });
-
-    //Cargo datos para tabla resumen
-	d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
-		.then(function(data) {
-			loadTickerTables(data);
+            //Cargo datos para tabla resumen
+            d3.dsv(";","https://raw.githubusercontent.com/jorgebaez212/datavisuba2018/master/cotizaciones/resources/ticker_summary.csv")
+            .then(function(data) {
+                loadTickerTables(data);    
+                console.log('Pagina lista!');
             });
+
+        });
 
 }
 
