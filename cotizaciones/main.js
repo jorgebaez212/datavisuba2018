@@ -70,8 +70,8 @@ function refreshTickersPlots(){
             var yearlyPriceVariation = parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.variacion_price_anio_ant]).toFixed(4)*100;
             yearlyPriceVariation = yearlyPriceVariation.toString();
 
-            //newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
-            //                        "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
+            newPriceTrace.text.push("Variacion - dia previo: %" + dailyPriceVariation*100 + "\n" + 
+                                    "Variacion - año previo: %" + yearlyPriceVariation*100 + "\n");
 
             newTirTrace.x.push(allVariationsOfTicker[j][allPricesVariationsColumnMapping.d_proc]);
             newTirTrace.y.push(parseFloat(allVariationsOfTicker[j][allPricesVariationsColumnMapping.tea_tir]).toFixed(4));
