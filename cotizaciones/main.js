@@ -76,9 +76,9 @@ function refreshTickersPlots(){
                 yearlyPriceVariationRaw = yearlyPriceVariationRaw.toString();
                 yearlyPriceVariation = yearlyPriceVariation.toString();
 
-                newPriceTrace.text.push("Variacion: dia previo (raw data): " + dailyPriceVariationRaw + "<br>" + 
+                newPriceTrace.text.push(/*"Variacion: dia previo (raw data): " + dailyPriceVariationRaw + "<br>" + */
                                         "Variacion: dia previo: %" + dailyPriceVariation + "<br>"  + 
-                                        "Variacion: año previo (raw data): " + yearlyPriceVariationRaw + "<br>" + 
+                                        /*"Variacion: año previo (raw data): " + yearlyPriceVariationRaw + "<br>" + */
                                         "Variacion: año previo: %" + yearlyPriceVariation  
                                     );
 
