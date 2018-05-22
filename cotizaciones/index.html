@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TP4 Layout HTML - utilizacion de bootstrap</title>
+    <title>TP5 Cotizaciones - Entrega Final</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Estilo -->
@@ -12,7 +12,7 @@
   <body>
     <div class="container-fluid" id="mainPage">
       <div class="row content">
-        <!--La idea es que el col-sm-4 sidenav quede fijo, pero de momento no lo pudimos lograr-->
+        <!--La idea es que el col-sm-4 sidenav quede fijo-->
         <div class="col-sm-4 sidenav">
           <h3>Cotizaciones en Argentina</h3>
 
@@ -32,7 +32,7 @@
             </span>
           </div>
 
-          <!--Tablas resumen de los tickers disponibles. Al hacer click en un item de allTickersContainer, este pasa a selectedTickersContainer y se grafica-->
+          <!--Divs para tablas resumen de los tickers disponibles. Al hacer click en un item de allTickersContainer, este pasa a selectedTickersContainer y se grafica-->
           <h4 align="center">Especies disponibles</h4>
           <div id="allTickersContainer" class="container">
           </div>
@@ -45,7 +45,7 @@
 
         </div>
 
-        <!--En la siguiente seccion se ubicarían los graficos de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
+        <!--En la siguiente seccion se ubicarán los graficos de d3 que mustren informacion de interes en base a la seleccion realizada por el usuario en la tabla-->
         <div class="col-sm-8">
 
             <div id="priceVariationsPlot">
@@ -59,7 +59,7 @@
     </div>
 
     <footer class="container-fluid">
-      <p>Visualización de la Información - Maestría en data mining y descubrimiento del conocimiento - 2018</p>
+      <p>Visualización de la Información - Jorge Baez - Bruno Palavecino - Maestría en data mining y descubrimiento del conocimiento - 2018</p>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
